@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Entry</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input, button {
+            padding: 8px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Enter Transaction Details</h1>
+    <form action="/" method="POST">
+        <label for="name">Customer Name:</label><br>
+        <input type="text" id="name" name="name" required><br>
+        
+        <label for="customer_id">Customer ID:</label><br>
+        <input type="number" id="customer_id" name="customer_id" required><br>
+        
+        <label for="order_id">Order ID:</label><br>
+        <input type="number" id="order_id" name="order_id" required><br>
+        
+        <label for="item_name">Item Name:</label><br>
+        <input type="text" id="item_name" name="item_name" required><br>
+        
+        <label for="transaction_id">Transaction ID:</label><br>
+        <input type="number" id="transaction_id" name="transaction_id" required><br>
+        
+        <label for="date">Transaction Date (YYYY-MM-DD):</label><br>
+        <input type="text" id="date" name="date" required><br>
+        
+        <label for="time">Transaction Time (HH:MM AM/PM):</label><br>
+        <input type="text" id="time" name="time" required><br><br>
+        
+        <button type="submit">Submit</button>
+    </form>
+
+    <h2>Transaction Details</h2>
+    {% if transactions %}
+        <ul>
+            {% for transaction in transactions %}
+                <li>
+                    <strong>Transaction ID:</strong> {{ transaction.transaction_id }} <br>
+                    <strong>Customer:</strong> {{ transaction.name }} (ID: {{ transaction.customer_id }}) <br>
+                    <strong>Item:</strong> {{ transaction.item_name }} (Order ID: {{ transaction.order_id }}) <br>
+                    <strong>Date:</strong> {{ transaction.date }} <strong>Time:</strong> {{ transaction.time }} <br><br>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No transactions entered yet.</p>
+    {% endif %}
+</body>
+</html>

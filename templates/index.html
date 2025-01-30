@@ -16,6 +16,24 @@
             padding: 8px;
             margin: 5px;
         }
+        h2 {
+            margin-top: 30px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 15px;
+        }
+        .transaction-details {
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+        .transaction-details strong {
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -49,11 +67,11 @@
     {% if transactions %}
         <ul>
             {% for transaction in transactions %}
-                <li>
-                    <strong>Transaction ID:</strong> {{ transaction.transaction_id }} <br>
-                    <strong>Customer:</strong> {{ transaction.name }} (ID: {{ transaction.customer_id }}) <br>
-                    <strong>Item:</strong> {{ transaction.item_name }} (Order ID: {{ transaction.order_id }}) <br>
-                    <strong>Date:</strong> {{ transaction.date }} <strong>Time:</strong> {{ transaction.time }} <br><br>
+                <li class="transaction-details">
+                    <strong>Transaction ID:</strong> {{ transaction[5] }} <br>
+                    <strong>Customer:</strong> {{ transaction[1] }} (ID: {{ transaction[2] }}) <br>
+                    <strong>Item:</strong> {{ transaction[3] }} (Order ID: {{ transaction[4] }}) <br>
+                    <strong>Date:</strong> {{ transaction[6] }} <strong>Time:</strong> {{ transaction[7] }} <br><br>
                 </li>
             {% endfor %}
         </ul>

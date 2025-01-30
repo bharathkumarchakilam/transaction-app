@@ -1,6 +1,16 @@
 from flask import Flask, render_template, request, redirect, url_for
+from flask_mysqldb import MySQL
 
 app = Flask(__name__)
+
+# MySQL Configuration
+app.config['MYSQL_HOST'] = 'localhost'  # Update with your host if needed
+app.config['MYSQL_USER'] = 'root'       # Update with your MySQL username
+app.config['MYSQL_PASSWORD'] = 'Bharath@2647'  # Update with your MySQL password
+app.config['MYSQL_DB'] = 'transaction_db'
+
+# Initialize MySQL
+mysql = MySQL(app)
 
 # Define the Customer, Order, and Transaction classes
 class Customer:
@@ -21,9 +31,6 @@ class Transaction(Order):
         self.date = date
         self.time = time
 
-# In-memory storage for transactions
-transactions = []
-
 # Route to display the form and handle input
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -37,14 +44,22 @@ def index():
         date = request.form['date']
         time = request.form['time']
 
-        # Create a new transaction object
-        transaction = Transaction(name, customer_id, order_id, item_name, transaction_id, date, time)
-
-        # Store the transaction in the list
-        transactions.append(transaction)
+        # Insert data into MySQL database
+        cur = mysql.connection.cursor()
+        cur.execute('''INSERT INTO transactions (name, customer_id, order_id, item_name, transaction_id, date, time)
+                       VALUES (%s, %s, %s, %s, %s, %s, %s)''',
+                    (name, customer_id, order_id, item_name, transaction_id, date, time))
+        mysql.connection.commit()
+        cur.close()
 
         # Redirect to the same page after form submission
         return redirect(url_for('index'))
+
+    # Retrieve all transactions from MySQL database
+    cur = mysql.connection.cursor()
+    cur.execute('SELECT * FROM transactions')
+    transactions = cur.fetchall()
+    cur.close()
 
     # Render the page with the form and display all transactions
     return render_template('index.html', transactions=transactions)

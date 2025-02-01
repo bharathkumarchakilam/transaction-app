@@ -4,79 +4,87 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transaction Entry</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        form {
-            margin-bottom: 20px;
-        }
-        input, button {
-            padding: 8px;
-            margin: 5px;
-        }
-        h2 {
-            margin-top: 30px;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            margin-bottom: 15px;
-        }
-        .transaction-details {
-            padding: 10px;
-            border: 1px solid #ddd;
-            background-color: #f9f9f9;
-        }
-        .transaction-details strong {
-            color: #333;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Enter Transaction Details</h1>
-    <form action="/" method="POST">
-        <label for="name">Customer Name:</label><br>
-        <input type="text" id="name" name="name" required><br>
-        
-        <label for="customer_id">Customer ID:</label><br>
-        <input type="number" id="customer_id" name="customer_id" required><br>
-        
-        <label for="order_id">Order ID:</label><br>
-        <input type="number" id="order_id" name="order_id" required><br>
-        
-        <label for="item_name">Item Name:</label><br>
-        <input type="text" id="item_name" name="item_name" required><br>
-        
-        <label for="transaction_id">Transaction ID:</label><br>
-        <input type="number" id="transaction_id" name="transaction_id" required><br>
-        
-        <label for="date">Transaction Date (YYYY-MM-DD):</label><br>
-        <input type="text" id="date" name="date" required><br>
-        
-        <label for="time">Transaction Time (HH:MM AM/PM):</label><br>
-        <input type="text" id="time" name="time" required><br><br>
-        
-        <button type="submit">Submit</button>
-    </form>
+    <div class="container">
+        <div class="left-panel">
+            <h1>Enter Transaction</h1>
+            <form action="/" method="POST">
+                <div class="input-group">
+                    <label for="name">Customer Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
 
-    <h2>Transaction Details</h2>
-    {% if transactions %}
-        <ul>
-            {% for transaction in transactions %}
-                <li class="transaction-details">
-                    <strong>Transaction ID:</strong> {{ transaction[5] }} <br>
-                    <strong>Customer:</strong> {{ transaction[1] }} (ID: {{ transaction[2] }}) <br>
-                    <strong>Item:</strong> {{ transaction[3] }} (Order ID: {{ transaction[4] }}) <br>
-                    <strong>Date:</strong> {{ transaction[6] }} <strong>Time:</strong> {{ transaction[7] }} <br><br>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No transactions entered yet.</p>
-    {% endif %}
+                <div class="input-group">
+                    <label for="customer_id">Customer ID:</label>
+                    <input type="number" id="customer_id" name="customer_id" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="order_id">Order ID:</label>
+                    <input type="number" id="order_id" name="order_id" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="item_name">Item Name:</label>
+                    <input type="text" id="item_name" name="item_name" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="transaction_id">Transaction ID:</label>
+                    <input type="number" id="transaction_id" name="transaction_id" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="date">Transaction Date:</label>
+                    <input type="text" id="date" name="date" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="time">Transaction Time:</label>
+                    <input type="text" id="time" name="time" required>
+                </div>
+
+                <button type="submit" class="btn">Submit</button>
+            </form>
+        </div>
+
+        <div class="right-panel">
+            <h2>Transaction Details</h2>
+            {% if transactions %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Transaction ID</th>
+                            <th>Customer</th>
+                            <th>Item</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaction in transactions %}
+                            <tr>
+                                <td>{{ transaction[5] }}</td>
+                                <td>{{ transaction[1] }} (ID: {{ transaction[2] }})</td>
+                                <td>{{ transaction[3] }} (Order ID: {{ transaction[4] }})</td>
+                                <td>{{ transaction[6] }}</td>
+                                <td>{{ transaction[7] }}</td>
+                                <td>
+                                    <form action="{{ url_for('delete_transaction', transaction_id=transaction[5]) }}" method="POST">
+                                        <button class="delete-btn" type="submit">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="no-transactions">No transactions entered yet.</p>
+            {% endif %}
+        </div>
+    </div>
 </body>
 </html>
